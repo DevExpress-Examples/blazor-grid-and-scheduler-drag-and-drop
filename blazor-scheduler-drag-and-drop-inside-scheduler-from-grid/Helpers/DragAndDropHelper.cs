@@ -45,6 +45,14 @@ public class DragAndDropHelper : IAsyncDisposable
         }
     }
 
+    public async Task UpdateDragPreviewPosition(double x, double y, double width, double height, string backgroundColor)
+    {
+        if (_module != null)
+        {
+            await _module.InvokeVoidAsync("updateDragPreviewPosition", x, y, width, height, backgroundColor);
+        }
+    }
+
     [JSInvokable]
     public async Task NotifyDragStart(double x, double y, int? itemIndex)
     {

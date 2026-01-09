@@ -3,28 +3,11 @@
 @inject IJSRuntime JSRuntime
 @implements IAsyncDisposable
 
-<style>
-    .drag-preview {
-        position: absolute;
-        pointer-events: none;
-        border: 2px dashed #007bff;
-        box-sizing: border-box;
-        z-index: 1000;
-        opacity: 0.8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        color: #007bff;
-    }
-</style>
-
 @ChildContent
 
 @if (isDragging)
 {
-    <div class="drag-preview" 
-         style="left: @(dragX)px; top: @(dragY)px; width: @(PreviewWidth)px; height: @(PreviewHeight)px; background-color: @PreviewBackgroundColor;">
+    <div class="drag-preview">
         @if (PreviewContent != null)
         {
             @PreviewContent
@@ -92,6 +75,10 @@
             {
                 await dragDropHelper.RegisterDropZone(dropZone.DropZoneSelector, dropZone.CellSelector);
             }
+        }
+        else if (isDragging && dragDropHelper != null)
+        {
+            await dragDropHelper.UpdateDragPreviewPosition(dragX, dragY, PreviewWidth, PreviewHeight, PreviewBackgroundColor);
         }
     }
 

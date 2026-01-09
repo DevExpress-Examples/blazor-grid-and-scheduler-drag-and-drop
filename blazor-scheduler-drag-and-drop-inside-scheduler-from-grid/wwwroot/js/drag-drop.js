@@ -24,6 +24,17 @@ export function registerDropZone(dropZoneSelector, cellSelector) {
     });
 }
 
+export function updateDragPreviewPosition(x, y, width, height, backgroundColor) {
+    const preview = document.querySelector('.drag-preview');
+    if (preview) {
+        preview.style.left = `${x}px`;
+        preview.style.top = `${y}px`;
+        preview.style.width = `${width}px`;
+        preview.style.height = `${height}px`;
+        preview.style.backgroundColor = backgroundColor;
+    }
+}
+
 function handleMouseDown(e) {
     if (e.button !== 0) return;
     
