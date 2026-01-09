@@ -1,0 +1,238 @@
+﻿@namespace blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Components
+@using blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Helpers
+@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
+
+<style>
+    .drag-preview {
+        position: absolute;
+        pointer-events: none;
+        border: 2px dashed #007bff;
+        box-sizing: border-box;
+        z-index: 1000;
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #007bff;
+    }
+</style>
+
+@ChildContent
+
+@if (isDragging)
+{
+    <div class="drag-preview" 
+         style="left: @(dragX)px; top: @(dragY)px; width: @(PreviewWidth)px; height: @(PreviewHeight)px; background-color: @PreviewBackgroundColor;">
+        @if (PreviewContent != null)
+        {
+            @PreviewContent
+        }
+    </div>
+}
+
+@code {
+    private DragAndDropHelper? dragDropHelper;
+    private bool isDragging = false;
+    private double dragX = 0;
+    private double dragY = 0;
+    private RenderFragment? PreviewContent;
+    private int? currentItemIndex = null;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string DragHandleSelector { get; set; } = ".drag-handle";
+
+    [Parameter]
+    public List<DropZoneConfig> DropZones { get; set; } = new();
+
+    [Parameter]
+    public double PreviewWidth { get; set; } = 150;
+
+    [Parameter]
+    public double PreviewHeight { get; set; } = 50;
+
+    [Parameter]
+    public string PreviewBackgroundColor { get; set; } = "#e3f2fd";
+
+    [Parameter]
+    public EventCallback<DragStartEventArgs> OnDragStart { get; set; }
+
+    [Parameter]
+    public EventCallback<DragMoveEventArgs> OnDragMove { get; set; }
+
+    [Parameter]
+    public EventCallback<DragEndEventArgs> OnDragEnd { get; set; }
+
+    [Parameter]
+    public EventCallback<DragEnterDropZoneEventArgs> OnDragEnterDropZone { get; set; }
+
+    [Parameter]
+    public EventCallback OnDragLeaveDropZone { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            dragDropHelper = new DragAndDropHelper(JSRuntime);
+            await dragDropHelper.InitializeAsync();
+
+            dragDropHelper.OnDragStart += HandleDragStart;
+            dragDropHelper.OnDragMove += HandleDragMove;
+            dragDropHelper.OnDragEnd += HandleDragEnd;
+            dragDropHelper.OnDragEnterDropZone += HandleDragEnterDropZone;
+            dragDropHelper.OnDragLeaveDropZone += HandleDragLeaveDropZone;
+
+            await dragDropHelper.StartDragging(DragHandleSelector);
+
+            foreach (var dropZone in DropZones)
+            {
+                await dragDropHelper.RegisterDropZone(dropZone.DropZoneSelector, dropZone.CellSelector);
+            }
+        }
+    }
+
+    private async Task HandleDragStart(double x, double y, int? itemIndex)
+    {
+        isDragging = true;
+        dragX = x;
+        dragY = y;
+        currentItemIndex = itemIndex;
+
+        var args = new DragStartEventArgs(x, y, itemIndex, SetPreviewContent);
+        await OnDragStart.InvokeAsync(args);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandleDragMove(double x, double y, int? itemIndex)
+    {
+        dragX = x;
+        dragY = y;
+
+        var args = new DragMoveEventArgs(x, y, itemIndex);
+        await OnDragMove.InvokeAsync(args);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandleDragEnd(double x, double y, int? itemIndex)
+    {
+        isDragging = false;
+
+        var args = new DragEndEventArgs(x, y, itemIndex);
+        await OnDragEnd.InvokeAsync(args);
+
+        PreviewContent = null;
+        currentItemIndex = null;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandleDragEnterDropZone(DropZoneCellInfo? cellInfo)
+    {
+        var args = new DragEnterDropZoneEventArgs(cellInfo);
+        await OnDragEnterDropZone.InvokeAsync(args);
+    }
+
+    private async Task HandleDragLeaveDropZone()
+    {
+        await OnDragLeaveDropZone.InvokeAsync();
+    }
+
+    private void SetPreviewContent(RenderFragment content)
+    {
+        PreviewContent = content;
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (dragDropHelper != null)
+        {
+            dragDropHelper.OnDragStart -= HandleDragStart;
+            dragDropHelper.OnDragMove -= HandleDragMove;
+            dragDropHelper.OnDragEnd -= HandleDragEnd;
+            dragDropHelper.OnDragEnterDropZone -= HandleDragEnterDropZone;
+            dragDropHelper.OnDragLeaveDropZone -= HandleDragLeaveDropZone;
+            
+            await dragDropHelper.DisposeAsync();
+        }
+    }
+
+    public class DropZoneConfig
+    {
+        public string DropZoneSelector { get; set; } = string.Empty;
+        public string CellSelector { get; set; } = string.Empty;
+
+        public DropZoneConfig() { }
+
+        public DropZoneConfig(string dropZoneSelector, string cellSelector)
+        {
+            DropZoneSelector = dropZoneSelector;
+            CellSelector = cellSelector;
+        }
+    }
+
+    public class DragStartEventArgs
+    {
+        public double X { get; }
+        public double Y { get; }
+        public int? ItemIndex { get; }
+        private Action<RenderFragment> SetPreviewContent { get; }
+
+        public DragStartEventArgs(double x, double y, int? itemIndex, Action<RenderFragment> setPreviewContent)
+        {
+            X = x;
+            Y = y;
+            ItemIndex = itemIndex;
+            SetPreviewContent = setPreviewContent;
+        }
+
+        public void SetPreview(RenderFragment content)
+        {
+            SetPreviewContent(content);
+        }
+    }
+
+    public class DragMoveEventArgs
+    {
+        public double X { get; }
+        public double Y { get; }
+        public int? ItemIndex { get; }
+
+        public DragMoveEventArgs(double x, double y, int? itemIndex)
+        {
+            X = x;
+            Y = y;
+            ItemIndex = itemIndex;
+        }
+    }
+
+    public class DragEndEventArgs
+    {
+        public double X { get; }
+        public double Y { get; }
+        public int? ItemIndex { get; }
+
+        public DragEndEventArgs(double x, double y, int? itemIndex)
+        {
+            X = x;
+            Y = y;
+            ItemIndex = itemIndex;
+        }
+    }
+
+    public class DragEnterDropZoneEventArgs
+    {
+        public DropZoneCellInfo? CellInfo { get; }
+
+        public DragEnterDropZoneEventArgs(DropZoneCellInfo? cellInfo)
+        {
+            CellInfo = cellInfo;
+        }
+    }
+}

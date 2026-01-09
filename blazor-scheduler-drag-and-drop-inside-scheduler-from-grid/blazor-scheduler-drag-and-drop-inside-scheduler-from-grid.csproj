@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>blazor_scheduler_drag_and_drop_inside_scheduler_from_grid</RootNamespace>
+    <AssemblyName>blazor-scheduler-drag-and-drop-inside-scheduler-from-grid</AssemblyName>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Blazor" Version="25.1.*" />
+  </ItemGroup>
+</Project>

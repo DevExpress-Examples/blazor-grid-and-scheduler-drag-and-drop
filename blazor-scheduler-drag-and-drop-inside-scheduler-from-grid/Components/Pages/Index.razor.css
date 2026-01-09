@@ -1,0 +1,37 @@
+.main-view {
+    height: 80vh;
+}
+.grid-container {
+    width: 100%;
+}
+.scheduler-container {
+    width: 100%;
+}
+.demo-container {
+    display: flex;
+    gap: 20px;
+    height: calc(100vh - 100px);
+}
+
+.grid-section {
+    width: 30%;
+    flex-shrink: 0;
+}
+
+.scheduler-section {
+    flex: 1;
+}
+
+.scheduler-height {
+    height: 80vh;
+}
+
+.scheduler-container .dxbl-scheduler-week-view .dxbl-scheduler-date-header {
+    min-width: 80px;
+    max-width: 100px;
+}
+
+.scheduler-container .dxbl-scheduler-week-view .dxbl-scheduler-header-cell {
+    min-width: 80px;
+    max-width: 100px;
+}

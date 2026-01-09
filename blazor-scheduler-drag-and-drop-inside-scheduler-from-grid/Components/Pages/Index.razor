@@ -1,0 +1,160 @@
+﻿@page "/"
+@using blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Data
+@using blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Helpers
+@using blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Components
+@using DevExpress.Blazor
+@inject DataService DataService
+@rendermode InteractiveServer
+
+<PageTitle>DxScheduler - Drag and Drop from Grid</PageTitle>
+
+<DragDropProvider DragHandleSelector=".drag-handle"
+                  DropZones="@dropZones"
+                  OnDragStart="@HandleDragStart"
+                  OnDragEnd="@HandleDragEnd"
+                  OnDragEnterDropZone="@HandleDragEnterDropZone"
+                  OnDragLeaveDropZone="@HandleDragLeaveDropZone"
+                  PreviewWidth="150"
+                  PreviewHeight="50"
+                  PreviewBackgroundColor="#e3f2fd">
+    <DxStackLayout Orientation="Orientation.Horizontal" CssClass="main-view" ItemSpacing="20px">
+        <Items>
+            <DxStackLayoutItem Length="1fr">
+                <Template>
+                    <DxGrid @ref="grid"
+                            Data="@GridItems" 
+                            PageSize="20" 
+                            CssClass="grid-container"
+                            AllowDragRows="false">
+                        <Columns>
+                            <DxGridDataColumn FieldName="Title" Width="40%"/>
+                            <DxGridDataColumn FieldName="Category" Width="40%" />
+                            <DxGridDataColumn FieldName="Priority" Width="20%" />
+                            <DxGridCommandColumn NewButtonVisible="false" Width="50px">
+                                <CellDisplayTemplate>
+                                    <div class="drag-handle"
+                                         data-item-index="@context.VisibleIndex">
+                                        ⋮⋮
+                                    </div>
+                                </CellDisplayTemplate>
+                                <HeaderCaptionTemplate>
+                                    <span>Drag</span>
+                                </HeaderCaptionTemplate>
+                            </DxGridCommandColumn>
+                        </Columns>
+                    </DxGrid>
+                </Template>
+            </DxStackLayoutItem>
+            <DxStackLayoutItem Length="3fr">
+                <Template>
+                    <DxScheduler @ref="scheduler"
+                                 StartDate="@StartDate"
+                                 DataStorage="@DataStorage"
+                                 CssClass="scheduler-container drop-zone"
+                                 ActiveViewType="SchedulerViewType.Week">
+                        <Views>
+                            <DxSchedulerWeekView CellMinWidth="50"
+                                                WorkTime="@(new DxSchedulerTimeSpanRange(TimeSpan.FromHours(9), TimeSpan.FromHours(19)))"
+                                                VisibleTime="@(new DxSchedulerTimeSpanRange(TimeSpan.FromHours(9), TimeSpan.FromHours(19)))" />
+                        </Views>
+                    </DxScheduler>
+                </Template>
+            </DxStackLayoutItem>
+        </Items>
+    </DxStackLayout>
+</DragDropProvider>
+
+@code {
+    private DateTime StartDate { get; set; } = DateTime.Today;
+    private DxSchedulerDataStorage DataStorage { get; set; } = null!;
+    private List<AppointmentData> Appointments { get; set; } = new();
+    private List<GridItemData> GridItems { get; set; } = new();
+
+    private IGrid grid = null!;
+    private DxScheduler scheduler = null!;
+    private DropZoneCellInfo? currentDropCell = null;
+    private GridItemData? draggedGridItem = null;
+
+    private List<DragDropProvider.DropZoneConfig> dropZones = new()
+    {
+        new DragDropProvider.DropZoneConfig(".dxbl-sc-table.dxbl-sc-horizontal-view tr:nth-child(2)", ".dxbl-sc-all-day-area"),
+        new DragDropProvider.DropZoneConfig(".dxbl-sc-table.dxbl-sc-vertical-view", ".dxbl-sc-time-cell")
+    };
+
+    protected override void OnInitialized()
+    {
+        Appointments = DataService.GetAppointments();
+        GridItems = DataService.GetGridItems();
+
+        DataStorage = new DxSchedulerDataStorage
+        {
+            AppointmentsSource = Appointments,
+            AppointmentMappings = new DxSchedulerAppointmentMappings
+            {
+                Id = nameof(AppointmentData.Id),
+                Start = nameof(AppointmentData.StartDate),
+                End = nameof(AppointmentData.EndDate),
+                Subject = nameof(AppointmentData.Subject),
+                Description = nameof(AppointmentData.Description),
+                AllDay = nameof(AppointmentData.AllDay),
+                RecurrenceInfo = nameof(AppointmentData.RecurrenceInfo)
+            }
+        };
+    }
+
+    private void HandleDragStart(DragDropProvider.DragStartEventArgs args)
+    {
+        currentDropCell = null;
+        draggedGridItem = null;
+
+        if (args.ItemIndex.HasValue)
+        {
+            var dataItem = grid.GetDataItem(args.ItemIndex.Value);
+            if (dataItem != null)
+            {
+                draggedGridItem = (GridItemData)dataItem;
+            }
+        }
+
+        args.SetPreview(builder =>
+        {
+            if (draggedGridItem != null)
+            {
+                builder.AddContent(0, draggedGridItem.Title);
+            }
+            else
+            {
+                builder.AddContent(0, "Dragging...");
+            }
+        });
+    }
+
+    private async Task HandleDragEnd(DragDropProvider.DragEndEventArgs args)
+    {
+        if (currentDropCell != null && draggedGridItem != null)
+        {
+            await CreateAppointmentFromGrid(currentDropCell, draggedGridItem);
+            currentDropCell = null;
+            draggedGridItem = null;
+        }
+    }
+
+    private void HandleDragEnterDropZone(DragDropProvider.DragEnterDropZoneEventArgs args)
+    {
+        currentDropCell = args.CellInfo;
+    }
+
+    private void HandleDragLeaveDropZone()
+    {
+        currentDropCell = null;
+    }
+
+    private async Task CreateAppointmentFromGrid(DropZoneCellInfo cellInfo, GridItemData gridItem)
+    {
+        var newAppointmentItem = await scheduler.CreateAppointmentAsync(cellInfo.Start, cellInfo.End, cellInfo.IsAllDay, null);
+        newAppointmentItem.Subject = gridItem.Title;
+        newAppointmentItem.Description = $"Category: {gridItem.Category}\nPriority: {gridItem.Priority}\n\n{gridItem.Description}";
+        await scheduler.SaveAppointmentAsync(newAppointmentItem);
+    }
+}
+
