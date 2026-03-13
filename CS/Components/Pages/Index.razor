@@ -1,7 +1,7 @@
 ﻿@page "/"
-@using blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Data
-@using blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Helpers
-@using blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Components
+@using blazor_grid_and_scheduler_drag_and_drop.Data
+@using blazor_grid_and_scheduler_drag_and_drop.Helpers
+@using blazor_grid_and_scheduler_drag_and_drop.Components
 @using DevExpress.Blazor
 @inject DataService DataService
 @rendermode InteractiveServer
@@ -75,22 +75,18 @@
     private DropZoneCellInfo? currentDropCell = null;
     private GridItemData? draggedGridItem = null;
 
-    private List<DragDropProvider.DropZoneConfig> dropZones = new()
-    {
+    private List<DragDropProvider.DropZoneConfig> dropZones = new() {
         new DragDropProvider.DropZoneConfig(".dxbl-sc-table.dxbl-sc-horizontal-view tr:nth-child(2)", ".dxbl-sc-all-day-area"),
         new DragDropProvider.DropZoneConfig(".dxbl-sc-table.dxbl-sc-vertical-view", ".dxbl-sc-time-cell")
     };
 
-    protected override void OnInitialized()
-    {
+    protected override void OnInitialized() {
         Appointments = DataService.GetAppointments();
         GridItems = DataService.GetGridItems();
 
-        DataStorage = new DxSchedulerDataStorage
-        {
+        DataStorage = new DxSchedulerDataStorage {
             AppointmentsSource = Appointments,
-            AppointmentMappings = new DxSchedulerAppointmentMappings
-            {
+            AppointmentMappings = new DxSchedulerAppointmentMappings {
                 Id = nameof(AppointmentData.Id),
                 Start = nameof(AppointmentData.StartDate),
                 End = nameof(AppointmentData.EndDate),
@@ -102,55 +98,44 @@
         };
     }
 
-    private void HandleDragStart(DragDropProvider.DragStartEventArgs args)
-    {
+    private void HandleDragStart(DragDropProvider.DragStartEventArgs args) {
         currentDropCell = null;
         draggedGridItem = null;
 
-        if (args.ItemIndex.HasValue)
-        {
+        if(args.ItemIndex.HasValue) {
             var dataItem = grid.GetDataItem(args.ItemIndex.Value);
-            if (dataItem != null)
-            {
+            if(dataItem != null) {
                 draggedGridItem = (GridItemData)dataItem;
             }
         }
 
-        args.SetPreview(builder =>
-        {
-            if (draggedGridItem != null)
-            {
+        args.SetPreview(builder => {
+            if(draggedGridItem != null) {
                 builder.AddContent(0, draggedGridItem.Title);
             }
-            else
-            {
+            else {
                 builder.AddContent(0, "Dragging...");
             }
         });
     }
 
-    private async Task HandleDragEnd(DragDropProvider.DragEndEventArgs args)
-    {
-        if (currentDropCell != null && draggedGridItem != null)
-        {
+    private async Task HandleDragEnd(DragDropProvider.DragEndEventArgs args) {
+        if(currentDropCell != null && draggedGridItem != null) {
             await CreateAppointmentFromGrid(currentDropCell, draggedGridItem);
             currentDropCell = null;
             draggedGridItem = null;
         }
     }
 
-    private void HandleDragEnterDropZone(DragDropProvider.DragEnterDropZoneEventArgs args)
-    {
+    private void HandleDragEnterDropZone(DragDropProvider.DragEnterDropZoneEventArgs args) {
         currentDropCell = args.CellInfo;
     }
 
-    private void HandleDragLeaveDropZone()
-    {
+    private void HandleDragLeaveDropZone() {
         currentDropCell = null;
     }
 
-    private async Task CreateAppointmentFromGrid(DropZoneCellInfo cellInfo, GridItemData gridItem)
-    {
+    private async Task CreateAppointmentFromGrid(DropZoneCellInfo cellInfo, GridItemData gridItem) {
         var newAppointmentItem = await scheduler.CreateAppointmentAsync(cellInfo.Start, cellInfo.End, cellInfo.IsAllDay, null);
         newAppointmentItem.Subject = gridItem.Title;
         newAppointmentItem.Description = $"Category: {gridItem.Category}\nPriority: {gridItem.Priority}\n\n{gridItem.Description}";

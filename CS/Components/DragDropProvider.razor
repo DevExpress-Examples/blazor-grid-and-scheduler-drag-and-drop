@@ -1,15 +1,13 @@
-﻿@namespace blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Components
-@using blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Helpers
+﻿@namespace blazor_grid_and_scheduler_drag_and_drop.Components
+@using blazor_grid_and_scheduler_drag_and_drop.Helpers
 @inject IJSRuntime JSRuntime
 @implements IAsyncDisposable
 
 @ChildContent
 
-@if (isDragging)
-{
+@if(isDragging) {
     <div class="drag-preview">
-        @if (PreviewContent != null)
-        {
+        @if(PreviewContent != null) {
             @PreviewContent
         }
     </div>
@@ -56,10 +54,8 @@
     [Parameter]
     public EventCallback OnDragLeaveDropZone { get; set; }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if(firstRender) {
             dragDropHelper = new DragAndDropHelper(JSRuntime);
             await dragDropHelper.InitializeAsync();
 
@@ -71,19 +67,16 @@
 
             await dragDropHelper.StartDragging(DragHandleSelector);
 
-            foreach (var dropZone in DropZones)
-            {
+            foreach(var dropZone in DropZones) {
                 await dragDropHelper.RegisterDropZone(dropZone.DropZoneSelector, dropZone.CellSelector);
             }
         }
-        else if (isDragging && dragDropHelper != null)
-        {
+        else if(isDragging && dragDropHelper != null) {
             await dragDropHelper.UpdateDragPreviewPosition(dragX, dragY, PreviewWidth, PreviewHeight, PreviewBackgroundColor);
         }
     }
 
-    private async Task HandleDragStart(double x, double y, int? itemIndex)
-    {
+    private async Task HandleDragStart(double x, double y, int? itemIndex) {
         isDragging = true;
         dragX = x;
         dragY = y;
@@ -95,8 +88,7 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task HandleDragMove(double x, double y, int? itemIndex)
-    {
+    private async Task HandleDragMove(double x, double y, int? itemIndex) {
         dragX = x;
         dragY = y;
 
@@ -106,8 +98,7 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task HandleDragEnd(double x, double y, int? itemIndex)
-    {
+    private async Task HandleDragEnd(double x, double y, int? itemIndex) {
         isDragging = false;
 
         var args = new DragEndEventArgs(x, y, itemIndex);
@@ -119,27 +110,22 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task HandleDragEnterDropZone(DropZoneCellInfo? cellInfo)
-    {
+    private async Task HandleDragEnterDropZone(DropZoneCellInfo? cellInfo) {
         var args = new DragEnterDropZoneEventArgs(cellInfo);
         await OnDragEnterDropZone.InvokeAsync(args);
     }
 
-    private async Task HandleDragLeaveDropZone()
-    {
+    private async Task HandleDragLeaveDropZone() {
         await OnDragLeaveDropZone.InvokeAsync();
     }
 
-    private void SetPreviewContent(RenderFragment content)
-    {
+    private void SetPreviewContent(RenderFragment content) {
         PreviewContent = content;
         StateHasChanged();
     }
 
-    public async ValueTask DisposeAsync()
-    {
-        if (dragDropHelper != null)
-        {
+    public async ValueTask DisposeAsync() {
+        if(dragDropHelper != null) {
             dragDropHelper.OnDragStart -= HandleDragStart;
             dragDropHelper.OnDragMove -= HandleDragMove;
             dragDropHelper.OnDragEnd -= HandleDragEnd;
@@ -150,75 +136,62 @@
         }
     }
 
-    public class DropZoneConfig
-    {
+    public class DropZoneConfig {
         public string DropZoneSelector { get; set; } = string.Empty;
         public string CellSelector { get; set; } = string.Empty;
 
-        public DropZoneConfig() { }
-
-        public DropZoneConfig(string dropZoneSelector, string cellSelector)
-        {
+        public DropZoneConfig(string dropZoneSelector, string cellSelector) {
             DropZoneSelector = dropZoneSelector;
             CellSelector = cellSelector;
         }
     }
 
-    public class DragStartEventArgs
-    {
+    public class DragStartEventArgs {
         public double X { get; }
         public double Y { get; }
         public int? ItemIndex { get; }
         private Action<RenderFragment> SetPreviewContent { get; }
 
-        public DragStartEventArgs(double x, double y, int? itemIndex, Action<RenderFragment> setPreviewContent)
-        {
+        public DragStartEventArgs(double x, double y, int? itemIndex, Action<RenderFragment> setPreviewContent) {
             X = x;
             Y = y;
             ItemIndex = itemIndex;
             SetPreviewContent = setPreviewContent;
         }
 
-        public void SetPreview(RenderFragment content)
-        {
+        public void SetPreview(RenderFragment content) {
             SetPreviewContent(content);
         }
     }
 
-    public class DragMoveEventArgs
-    {
+    public class DragMoveEventArgs {
         public double X { get; }
         public double Y { get; }
         public int? ItemIndex { get; }
 
-        public DragMoveEventArgs(double x, double y, int? itemIndex)
-        {
+        public DragMoveEventArgs(double x, double y, int? itemIndex) {
             X = x;
             Y = y;
             ItemIndex = itemIndex;
         }
     }
 
-    public class DragEndEventArgs
-    {
+    public class DragEndEventArgs {
         public double X { get; }
         public double Y { get; }
         public int? ItemIndex { get; }
 
-        public DragEndEventArgs(double x, double y, int? itemIndex)
-        {
+        public DragEndEventArgs(double x, double y, int? itemIndex) {
             X = x;
             Y = y;
             ItemIndex = itemIndex;
         }
     }
 
-    public class DragEnterDropZoneEventArgs
-    {
+    public class DragEnterDropZoneEventArgs {
         public DropZoneCellInfo? CellInfo { get; }
 
-        public DragEnterDropZoneEventArgs(DropZoneCellInfo? cellInfo)
-        {
+        public DragEnterDropZoneEventArgs(DropZoneCellInfo? cellInfo) {
             CellInfo = cellInfo;
         }
     }

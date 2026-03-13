@@ -3,8 +3,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>blazor_scheduler_drag_and_drop_inside_scheduler_from_grid</RootNamespace>
-    <AssemblyName>blazor-scheduler-drag-and-drop-inside-scheduler-from-grid</AssemblyName>
+    <RootNamespace>blazor_grid_and_scheduler_drag_and_drop</RootNamespace>
+    <AssemblyName>blazor-grid-and-scheduler-drag-and-drop</AssemblyName>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
