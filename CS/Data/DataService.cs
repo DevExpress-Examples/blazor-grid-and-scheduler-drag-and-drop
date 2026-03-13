@@ -1,32 +1,27 @@
-﻿namespace blazor_scheduler_drag_and_drop_inside_scheduler_from_grid.Data;
+﻿namespace blazor_grid_and_scheduler_drag_and_drop.Data;
 
-public class DataService
-{
+public class DataService {
     private List<AppointmentData> _appointments = new();
     private List<GridItemData> _gridItems = new();
     private int _appointmentIdCounter = 1;
     private int _gridItemIdCounter = 1;
 
-    public DataService()
-    {
+    public DataService() {
         InitializeData();
     }
 
     public List<AppointmentData> GetAppointments() => _appointments;
     public List<GridItemData> GetGridItems() => _gridItems;
 
-    public void AddAppointment(AppointmentData appointment)
-    {
+    public void AddAppointment(AppointmentData appointment) {
         appointment.Id = _appointmentIdCounter++;
         _appointments.Add(appointment);
     }
 
-    private void InitializeData()
-    {
+    private void InitializeData() {
         var today = DateTime.Today;
 
-        _appointments = new List<AppointmentData>
-        {
+        _appointments = new List<AppointmentData> {
             new() { Id = _appointmentIdCounter++, Subject = "Team Meeting", Description = "Weekly sync meeting", StartDate = today.AddHours(9), EndDate = today.AddHours(10), AllDay = false },
             new() { Id = _appointmentIdCounter++, Subject = "Project Review", Description = "Q1 project review", StartDate = today.AddDays(1).AddHours(14), EndDate = today.AddDays(1).AddHours(15.5), AllDay = false },
             new() { Id = _appointmentIdCounter++, Subject = "Client Call", Description = "Discussion with client", StartDate = today.AddDays(-1).AddHours(11), EndDate = today.AddDays(-1).AddHours(12), AllDay = false },
@@ -44,8 +39,7 @@ public class DataService
             new() { Id = _appointmentIdCounter++, Subject = "Release Planning", Description = "Plan next release", StartDate = today.AddDays(8).AddHours(13), EndDate = today.AddDays(8).AddHours(15), AllDay = false }
         };
 
-        _gridItems = new List<GridItemData>
-        {
+        _gridItems = new List<GridItemData> {
             new() { Id = _gridItemIdCounter++, Title = "Website Redesign", Category = "Design", Description = "Redesign company website", Priority = 1 },
             new() { Id = _gridItemIdCounter++, Title = "API Development", Category = "Development", Description = "Build REST API", Priority = 2 },
             new() { Id = _gridItemIdCounter++, Title = "Database Migration", Category = "Infrastructure", Description = "Migrate to cloud database", Priority = 1 },
