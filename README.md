@@ -20,7 +20,7 @@ See [Index.razor](./CS/BlazorSchedulerDragAndDropInsideSchedulerFromGrid/Compone
 
 ### Blazor Grid Configuration
 
-See [Blazor Grid Markup](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/e11e2b21d57d54aee687f262fd1e21dce672a0e1/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/Components/Pages/Index.razor#L24).
+See [Blazor Grid Markup](./CS/Components/Pages/Index.razor#L24).
 
 - A `DxGridCommandColumn` template renders a drag handle.
 - The `drag-handle` CSS class is used to locate the handle in JavaScript.
@@ -29,7 +29,7 @@ See [Blazor Grid Markup](https://github.com/DevExpress-Examples/draft-blazor-sch
 
 ### Blazor Scheduler Configuration
 
-See [Blazor Scheduler Markup](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/e11e2b21d57d54aee687f262fd1e21dce672a0e1/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/Components/Pages/Index.razor#L50).
+See [Blazor Scheduler Markup](./CS/Components/Pages/Index.razor#L50).
 
 - `CssClass="scheduler-container drop-zone"` is used to detect the drop zone in JavaScript.
 
@@ -37,42 +37,42 @@ See [Blazor Scheduler Markup](https://github.com/DevExpress-Examples/draft-blazo
 
 ### JavaScript Logic
 
-See [drag-drop.js](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/25.2.3%2B/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/wwwroot/js/drag-drop.js).
+See [drag-drop.js](./CS/wwwroot/js/drag-drop.js).
 
 Main event handlers:
 
-* [handleMouseDown](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/25.2.3%2B/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/wwwroot/js/drag-drop.js#L38) - Handles the start of a drag operation.
-* [handleMouseMove](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/25.2.3%2B/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/wwwroot/js/drag-drop.js#L59) - Updates the drag preview position and highlights drop zones.
-* [handleMouseUp](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/25.2.3%2B/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/wwwroot/js/drag-drop.js#L167) - Finalizes the drag operation and processes the drop.
+* [handleMouseDown](./CS/wwwroot/js/drag-drop.js#L38) - Handles the start of a drag operation.
+* [handleMouseMove](./CS/wwwroot/js/drag-drop.js#L59) - Updates the drag preview position and highlights drop zones.
+* [handleMouseUp](./CS/wwwroot/js/drag-drop.js#L167) - Finalizes the drag operation and processes the drop.
 
 ### C# Logic
 
-See [Index.razor](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/e11e2b21d57d54aee687f262fd1e21dce672a0e1/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/Components/Pages/Index.razor#L105).
+See [Index.razor](./CS/Components/Pages/Index.razor#L105).
 
 Main event handlers:
 
-- [HandleDragStart](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/e11e2b21d57d54aee687f262fd1e21dce672a0e1/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/Components/Pages/Index.razor#L105) - Stores dragged item data and renders the drag preview.
-- [HandleDragEnterDropZone](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/e11e2b21d57d54aee687f262fd1e21dce672a0e1/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/Components/Pages/Index.razor#L142) - Stores target cell information.
-- [HandleDragLeaveDropZone](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/e11e2b21d57d54aee687f262fd1e21dce672a0e1/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/Components/Pages/Index.razor#L147) - Clears target cell information.
-- [HandleDragEnd](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/e11e2b21d57d54aee687f262fd1e21dce672a0e1/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/Components/Pages/Index.razor#L132) - Handles the drop event.
-- [CreateAppointmentFromGrid](https://github.com/DevExpress-Examples/draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/blob/e11e2b21d57d54aee687f262fd1e21dce672a0e1/blazor-scheduler-drag-and-drop-inside-scheduler-from-grid/Components/Pages/Index.razor#L152) - Creates a new appointment from the dragged item data.
+- [HandleDragStart](./CS/Components/Pages/Index.razor#L101) - Stores dragged item data and renders the drag preview.
+- [HandleDragEnterDropZone](./CS/Components/Pages/Index.razor#L130) - Stores target cell information.
+- [HandleDragLeaveDropZone](./CS/Components/Pages/Index.razor#L134) - Clears target cell information.
+- [HandleDragEnd](./CS/Components/Pages/Index.razor#L122) - Handles the drop event.
+- [CreateAppointmentFromGrid](./CS/Components/Pages/Index.razor#L138) - Creates a new appointment from the dragged item data.
 
 ### Drag-and-Drop Provider
 
-See [DragDropProvider.razor](./CS/BlazorSchedulerDragAndDropInsideSchedulerFromGrid/Components/DragDropProvider.razor).
+See [DragDropProvider.razor](./CS/Components/DragDropProvider.razor).
 
 - The provider stores [DragAndDropHelper](#drag-and-drop-helper) and a drag template, registers required JavaScript/C# events, and exposes event handlers via parameters.
-- Both the Grid and Scheduler [are wrapped](./CS/BlazorSchedulerDragAndDropInsideSchedulerFromGrid/Components/Pages/Index.razor#L11) with this provider.
+- Both the Grid and Scheduler [are wrapped](./CS/Components/Pages/Index.razor#L11) with this provider.
 
 ### Drag-and-Drop Helper
 
-See [DragAndDropHelper.cs](./CS/BlazorSchedulerDragAndDropInsideSchedulerFromGrid/Helpers/DragAndDropHelper.cs).
+See [DragAndDropHelper.cs](./CS/Helpers/DragAndDropHelper.cs).
 
 
 <!-- feedback -->
 ## Does this example address your development requirements/objectives?
 
-[<img src="https://www.devexpress.com/support/examples/i/yes-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid&~~~was_helpful=yes) [<img src="https://www.devexpress.com/support/examples/i/no-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=draft-blazor-scheduler-drag-and-drop-inside-scheduler-from-grid&~~~was_helpful=no)
+[<img src="https://www.devexpress.com/support/examples/i/yes-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=blazor-grid-and-scheduler-drag-and-drop&~~~was_helpful=yes) [<img src="https://www.devexpress.com/support/examples/i/no-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=blazor-grid-and-scheduler-drag-and-drop&~~~was_helpful=no)
 
 (you will be redirected to DevExpress.com to submit your response)
 <!-- feedback end -->
