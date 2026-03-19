@@ -15,7 +15,7 @@ This example demonstrates drag & drop functionality that allows you to move item
 
 See [Index.razor](./CS/BlazorSchedulerDragAndDropInsideSchedulerFromGrid/Components/Pages/Index.razor).
 
-- The [DragDropProvider](#drag-and-drop-provider) component wraps [Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxGrid) and [Scheduler](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxScheduler) components and provides drag-and-drop logic.
+- The [DragDropProvider](#drag-and-drop-provider) component wraps [Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxGrid) and [Scheduler](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxScheduler) components and implements drag & drop logic.
 - The [DevExpress Blazor Stack Layout](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxStackLayout) component is used to arrange [Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxGrid) and [Scheduler](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxScheduler) components on a page.
 
 ### Blazor Grid Configuration
