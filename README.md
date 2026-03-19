@@ -5,7 +5,7 @@
 [![](https://img.shields.io/badge/💬_Leave_Feedback-feecdd?style=flat-square)](#does-this-example-address-your-development-requirementsobjectives)
 <!-- default badges end -->
 
-# Blazor Grid and Scheduler - Drag-and-Drop Operations Between Components
+# Blazor Grid and Scheduler - Drag & Drop Items Between Components
 
 This example demonstrates drag & drop functionality that allows you to move items from the [DevExpress Blazor Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxGrid) to the [DevExpress Blazor Scheduler](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxScheduler). While Grid and Scheduler components support drag & drop operations within their own boundaries, this example implements a custom drag-and-drop functionality between the components.
 
