@@ -173,14 +173,14 @@ Main event handlers:
         }
     ```
 
-### Drag-and-Drop Provider
+### Drag & Drop Provider
 
 See [DragDropProvider.razor](./CS/Components/DragDropProvider.razor).
 
 - The provider stores [DragAndDropHelper](#drag-and-drop-helper) and a drag template, registers required JavaScript/C# events, and exposes event handlers via parameters.
 - Both the Grid and Scheduler [are wrapped](./CS/Components/Pages/Index.razor#L11) within this provider.
 
-### Drag-and-Drop Helper
+### Drag & Drop Helper
 
 See [DragAndDropHelper.cs](./CS/Helpers/DragAndDropHelper.cs).
 
