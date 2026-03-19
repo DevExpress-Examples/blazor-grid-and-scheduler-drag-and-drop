@@ -122,44 +122,44 @@ Main event handlers:
 - [HandleDragStart](./CS/Components/Pages/Index.razor#L101) - Stores dragged item data and renders the drag preview.
 
     ```csharp
-        private void HandleDragStart(DragDropProvider.DragStartEventArgs args) {
-            currentDropCell = null;
-            draggedGridItem = null;
+    private void HandleDragStart(DragDropProvider.DragStartEventArgs args) {
+        currentDropCell = null;
+        draggedGridItem = null;
 
-            if(args.ItemIndex.HasValue) {
-                var dataItem = grid.GetDataItem(args.ItemIndex.Value);
-                if(dataItem != null) {
-                    draggedGridItem = (GridItemData)dataItem;
-                }
+        if(args.ItemIndex.HasValue) {
+            var dataItem = grid.GetDataItem(args.ItemIndex.Value);
+            if(dataItem != null) {
+                draggedGridItem = (GridItemData)dataItem;
             }
+        }
     ```
 
 - [HandleDragEnterDropZone](./CS/Components/Pages/Index.razor#L130) - Stores target cell information.
 
     ```csharp
-        private void HandleDragEnterDropZone(DragDropProvider.DragEnterDropZoneEventArgs args) {
-            currentDropCell = args.CellInfo;
-        }
+    private void HandleDragEnterDropZone(DragDropProvider.DragEnterDropZoneEventArgs args) {
+        currentDropCell = args.CellInfo;
+    }
     ```
 
 - [HandleDragLeaveDropZone](./CS/Components/Pages/Index.razor#L134) - Clears target cell information.
 
     ```csharp
-        private void HandleDragLeaveDropZone() {
-            currentDropCell = null;
-        }
+    private void HandleDragLeaveDropZone() {
+        currentDropCell = null;
+    }
     ```
 
 - [HandleDragEnd](./CS/Components/Pages/Index.razor#L122) - Handles the drop event.
 
     ```csharp
-        private async Task HandleDragEnd(DragDropProvider.DragEndEventArgs args) {
-            if(currentDropCell != null && draggedGridItem != null) {
-                await CreateAppointmentFromGrid(currentDropCell, draggedGridItem);
-                currentDropCell = null;
-                draggedGridItem = null;
-            }
+    private async Task HandleDragEnd(DragDropProvider.DragEndEventArgs args) {
+        if(currentDropCell != null && draggedGridItem != null) {
+            await CreateAppointmentFromGrid(currentDropCell, draggedGridItem);
+            currentDropCell = null;
+            draggedGridItem = null;
         }
+    }
     ```
 
 - [CreateAppointmentFromGrid](./CS/Components/Pages/Index.razor#L138) - Creates a new appointment from the dragged item data.
