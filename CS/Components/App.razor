@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
-    @DxResourceManager.RegisterTheme(FluentLight)
+    @DxResourceManager.RegisterTheme(ActiveTheme)
     @DxResourceManager.RegisterScripts()
     <link href=@AppendVersion("css/site.css") rel="stylesheet" />
     <link href=@AppendVersion("blazor-grid-and-scheduler-drag-and-drop.styles.css") rel="stylesheet" />
@@ -22,5 +22,8 @@
 
 @code {
     private string AppendVersion(string path) => FileVersionProvider.AddFileVersionToPath("/", path);
-    private static readonly ITheme FluentLight = Themes.Fluent.Clone(p => p.AddFilePaths($"css/theme-fluent.css"));
+    static readonly ITheme ActiveTheme = Themes.Fluent.Clone(properties =>
+    {
+        properties.Mode = ThemeMode.Light;
+    });
 }
