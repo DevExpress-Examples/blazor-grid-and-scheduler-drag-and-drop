@@ -33,7 +33,7 @@ See [Blazor Scheduler Markup](./CS/Components/Pages/Index.razor#L50).
 
 - `CssClass="scheduler-container drop-zone"` is used to detect the drop zone in JavaScript.
 
-## Drag-and-Drop Implementation
+## Drag & Drop Implementation
 
 ### JavaScript Logic
 
