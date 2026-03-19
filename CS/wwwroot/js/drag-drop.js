@@ -153,7 +153,6 @@ function getCellInfo(cell) {
         }
     }
     
-    console.log('Cell info:', info); 
     return JSON.stringify(info);
 }
 
