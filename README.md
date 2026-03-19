@@ -59,7 +59,7 @@ See [Blazor Scheduler Markup](./CS/Components/Pages/Index.razor#L50).
 
 ## Drag & Drop Implementation
 
-### JavaScript Logic
+### Client-Side Scripts
 
 See [drag-drop.js](./CS/wwwroot/js/drag-drop.js).
 
@@ -113,7 +113,7 @@ Main event handlers:
     }
     ```
 
-### C# Logic
+### C# Implementation
 
 See [Index.razor](./CS/Components/Pages/Index.razor#L105).
 
@@ -164,14 +164,14 @@ Main event handlers:
 
 - [CreateAppointmentFromGrid](./CS/Components/Pages/Index.razor#L138) - Creates a new appointment from the dragged item data.
 
-```csharp
-    private async Task CreateAppointmentFromGrid(DropZoneCellInfo cellInfo, GridItemData gridItem) {
-        var newAppointmentItem = await scheduler.CreateAppointmentAsync(cellInfo.Start, cellInfo.End, cellInfo.IsAllDay, null);
-        newAppointmentItem.Subject = gridItem.Title;
-        newAppointmentItem.Description = $"Category: {gridItem.Category}\nPriority: {gridItem.Priority}\n\n{gridItem.Description}";
-        await scheduler.SaveAppointmentAsync(newAppointmentItem);
-    }
-```
+    ```csharp
+        private async Task CreateAppointmentFromGrid(DropZoneCellInfo cellInfo, GridItemData gridItem) {
+            var newAppointmentItem = await scheduler.CreateAppointmentAsync(cellInfo.Start, cellInfo.End, cellInfo.IsAllDay, null);
+            newAppointmentItem.Subject = gridItem.Title;
+            newAppointmentItem.Description = $"Category: {gridItem.Category}\nPriority: {gridItem.Priority}\n\n{gridItem.Description}";
+            await scheduler.SaveAppointmentAsync(newAppointmentItem);
+        }
+    ```
 
 ### Drag-and-Drop Provider
 
