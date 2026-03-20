@@ -6,7 +6,7 @@
 <!-- default badges end -->
 # Blazor Grid and Scheduler - Drag & Drop Items Between Components
 
-This example demonstrates drag & drop functionality that allows you to move items from the [DevExpress Blazor Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxGrid) to the [DevExpress Blazor Scheduler](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxScheduler). While Grid and Scheduler components support drag & drop operations within their own boundaries, this example implements a custom drag & drop functionality between the components.
+This example allows you to drag & drop items from the [DevExpress Blazor Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxGrid) to the [DevExpress Blazor Scheduler](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxScheduler). While both our Grid and Scheduler components support drag & drop operations within their own boundaries, this example implements custom drag & drop between the two components.
 
 ![Drag and Drop Functionality](grid-scheduler-drag-and-drop.png)
 
@@ -48,7 +48,7 @@ See [Blazor Grid Markup](./CS/Components/Pages/Index.razor#L24).
 
 See [Blazor Scheduler Markup](./CS/Components/Pages/Index.razor#L50).
 
-- `CssClass="scheduler-container drop-zone"` is used to detect the drop zone within the Scheduler component via JavaScript.
+- `CssClass="scheduler-container drop-zone"` is used to detect the drop zone within the Scheduler component using JavaScript.
 
     ```Razor
     <DxScheduler DataStorage="@DataStorage"
@@ -81,7 +81,7 @@ Main event handlers:
     }
     ```
 
-* [handleMouseMove](./CS/wwwroot/js/drag-drop.js#L59) - Updates the drag preview position and highlights drop zones.
+* [handleMouseMove](./CS/wwwroot/js/drag-drop.js#L59) - Updates drag preview position and highlights drop zones.
 
     ```js
     function handleMouseMove(e) {
