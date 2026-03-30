@@ -12,9 +12,9 @@ This example allows you to drag & drop items from the [DevExpress Blazor Grid](h
 
 ## Main Page Structure
 
-See [Index.razor](./CS/BlazorSchedulerDragAndDropInsideSchedulerFromGrid/Components/Pages/Index.razor).
+See [Index.razor](./CS/Components/Pages/Index.razor).
 
-- The [DragDropProvider](#drag-and-drop-provider) component wraps [Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxGrid) and [Scheduler](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxScheduler) components and implements drag & drop logic.
+- The [DragDropProvider](#drag--drop-provider) component wraps [Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxGrid) and [Scheduler](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxScheduler) components and implements drag & drop logic.
 - The [DevExpress Blazor Stack Layout](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxStackLayout) component arranges [Grid](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxGrid) and [Scheduler](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxScheduler) components on a page.
 
 ### Blazor Grid Configuration
@@ -177,7 +177,7 @@ Main event handlers:
 
 See [DragDropProvider.razor](./CS/Components/DragDropProvider.razor).
 
-- The provider stores [DragAndDropHelper](#drag-and-drop-helper) and a drag template, registers required JavaScript/C# events, and exposes event handlers via parameters.
+- The provider stores [DragAndDropHelper](#drag--drop-helper) and a drag template, registers required JavaScript/C# events, and exposes event handlers via parameters.
 - Both the Grid and Scheduler [are wrapped](./CS/Components/Pages/Index.razor#L11) within this provider.
 
 ### Drag & Drop Helper
