@@ -1,7 +1,7 @@
 .drag-preview {
     position: absolute;
     pointer-events: none;
-    border: 2px dashed #007bff;
+    border: 2px dashed var(--app-dnd-primary-color);
     box-sizing: border-box;
     z-index: 1000;
     opacity: 0.8;
@@ -9,5 +9,5 @@
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    color: #007bff;
+    color: var(--app-dnd-primary-color);
 }
